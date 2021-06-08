@@ -1,33 +1,43 @@
-# -*-coding:utf-8-*-
-import requests
+# -*- coding: utf-8 -*-
+# @Author    : Eurkon
+# @Date      : 2021/6/5 10:16
+
 import json
+import requests
 from bs4 import BeautifulSoup
 from http.server import BaseHTTPRequestHandler
 
 
-def get_data():
-    news = []
-    top_url = 'https://s.weibo.com/top/summary/'
-    r = requests.get(top_url)
+def get_data(params):
+    """爬取微博热搜
 
-    soup = BeautifulSoup(r.text, 'html.parser')
+    Args:
+
+    Returns:
+        微博热搜 json {title：标题, url：地址, num：数值, hot：等级}
+    """
+
+    data = []
+    respose = requests.get('https://s.weibo.com/top/summary/')
+    soup = BeautifulSoup(respose.text, 'html.parser')
     url = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-02 > a')
     num = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-02 > span')
     hot = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-03')
 
     for i in range(1, len(url)):
-        top_news = {}
-        top_news['title'] = url[i].get_text()
-        top_news['url'] = "https://s.weibo.com" + url[i]['href']
-        top_news['num'] = num[i - 1].get_text()
+        news = {
+            'title': url[i].get_text(),
+            'url': "https://s.weibo.com" + url[i]['href'],
+            'num': num[i - 1].get_text()
+        }
         hotness = hot[i].get_text().replace('</i>', ''). \
             replace('<i class="icon-txt icon-txt-hot">', '').replace('<i class="icon-txt icon-txt-new">', '')
-        top_news['hot'] = hotness
+        news['hot'] = hotness
         # 去除广告链接
-        if (hotness != '荐'):
-            news.append(top_news)
+        if hotness != '荐':
+            data.append(news)
 
-    return news
+    return data
 
 
 class handler(BaseHTTPRequestHandler):
