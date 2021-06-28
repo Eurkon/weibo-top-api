@@ -35,7 +35,7 @@ def get_data():
             replace('<i class="icon-txt icon-txt-hot">', '').replace('<i class="icon-txt icon-txt-new">', '')
         news['hot'] = hotness
         # 去除广告链接
-        if hotness != '荐':
+        if hotness != '荐' and hotness != '商':
             data.append(news)
 
     return data
