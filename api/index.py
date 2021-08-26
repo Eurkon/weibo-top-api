@@ -26,17 +26,16 @@ def get_data():
     hot = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-03')
 
     for i in range(1, len(url)):
-        news = {
-            'title': url[i].get_text(),
-            'url': "https://s.weibo.com" + url[i]['href'],
-            'num': num[i - 1].get_text()
-        }
-        hotness = hot[i].get_text().replace('<i class="icon-txt icon-txt-', '').replace('</i>', '').replace('">', '') \
-            .replace('new', '').replace('hot', '').replace('boil', '').replace('boom', '')
-        news['hot'] = hotness
         # 去除广告链接
-        if hotness != '荐' and hotness != '商':
-            data.append(news)
+        if num[i - 1].get_text() != '':
+            data.append({
+                'title': url[i].get_text(),
+                'url': "https://s.weibo.com" + url[i]['href'],
+                'num': num[i - 1].get_text(),
+                'hot': hot[i].get_text().replace('<i class="icon-txt icon-txt-', '') \
+                    .replace('</i>', '').replace('">', '') \
+                    .replace('new', '').replace('hot', '').replace('boil', '').replace('boom', '').strip()
+            })
 
     return data
 
