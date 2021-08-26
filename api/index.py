@@ -31,8 +31,8 @@ def get_data():
             'url': "https://s.weibo.com" + url[i]['href'],
             'num': num[i - 1].get_text()
         }
-        hotness = hot[i].get_text().replace('</i>', ''). \
-            replace('<i class="icon-txt icon-txt-hot">', '').replace('<i class="icon-txt icon-txt-new">', '')
+        hotness = hot[i].get_text().replace('<i class="icon-txt icon-txt-', '').replace('</i>', '').replace('">', '') \
+            .replace('new', '').replace('hot', '').replace('boil', '').replace('boom', '')
         news['hot'] = hotness
         # 去除广告链接
         if hotness != '荐' and hotness != '商':
