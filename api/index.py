@@ -24,10 +24,17 @@ def get_data():
     url = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-02 > a')
     num = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-02 > span')
     hot = soup.select('#pl_top_realtimehot > table > tbody > tr > td.td-03')
+    jyzy = {
+        '电影': '影',
+        '剧集': '剧',
+        '综艺': '综',
+        '音乐': '音'
+    }
 
     for i in range(1, len(url)):
         # 去除广告链接
         num_string = num[i - 1].get_text().strip()
+        print(url[i].get_text().strip())
         if num_string != '':
             num_split = num_string.split(' ')
             dic = {
@@ -39,7 +46,7 @@ def get_data():
                     .replace('new', '').replace('hot', '').replace('boil', '').replace('boom', '').strip()
             }
             if len(num_split) > 1:
-                dic['hot'] = num_split[0][0]
+                dic['hot'] = jyzy[num_split[0]] if num_split[0] in jyzy.keys() else ''
             data.append(dic)
 
     return data
