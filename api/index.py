@@ -27,15 +27,20 @@ def get_data():
 
     for i in range(1, len(url)):
         # 去除广告链接
-        if num[i - 1].get_text() != '':
-            data.append({
-                'title': url[i].get_text(),
-                'url': "https://s.weibo.com" + url[i]['href'],
-                'num': num[i - 1].get_text(),
+        num_string = num[i - 1].get_text().strip()
+        if num_string != '':
+            num_split = num_string.split(' ')
+            dic = {
+                'title': url[i].get_text().strip(),
+                'url': "https://s.weibo.com" + url[i]['href'].strip(),
+                'num': num_split[len(num_split) - 1],
                 'hot': hot[i].get_text().replace('<i class="icon-txt icon-txt-', '') \
                     .replace('</i>', '').replace('">', '') \
                     .replace('new', '').replace('hot', '').replace('boil', '').replace('boom', '').strip()
-            })
+            }
+            if len(num_split) > 1:
+                dic['hot'] = num_split[0][0]
+            data.append(dic)
 
     return data
 
