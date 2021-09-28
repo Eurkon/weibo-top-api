@@ -42,7 +42,7 @@ def get_data():
             hot = '爆'
         if 'is_hot' in data_item:
             hot = '热'
-        if 'is_boil' in data_item:
+        if 'is_fei' in data_item:
             hot = '沸'
         if 'is_new' in data_item:
             hot = '新'
